@@ -1,5 +1,5 @@
-static/
 build/
+dist/
 *.pyc
 .DS_Store
 .idea*

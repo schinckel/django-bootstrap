@@ -34,6 +34,7 @@ template_patterns = [
     'templates/*.html',
     'templates/*/*.html',
     'templates/*/*/*.html',
+    'static/bootstrap/*/*',
 ]
 
 package_data = dict(
