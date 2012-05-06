@@ -14,13 +14,6 @@ class BootstrapMixin(object):
 
     def __init__(self, *args, **kwargs):
         super(BootstrapMixin, self).__init__(*args, **kwargs)
-        # do we have an explicit layout?
-        if hasattr(self, 'Meta') and hasattr(self.Meta, 'layout'):
-            self.layout = self.Meta.layout
-        else:
-            # Construct a simple layout using the keys from the fields
-            self.layout = self.fields.keys()
-
         if hasattr(self, 'Meta') and hasattr(self.Meta, 'custom_fields'):
             self.custom_fields = self.Meta.custom_fields
         else:
@@ -39,13 +32,23 @@ class BootstrapMixin(object):
         return ''.join(["<div class=\"alert alert-error\">%s</div>" % error
                         for error in self.top_errors])
 
+    def get_layout(self):
+        """ Return the user-specified layout if one is available, otherwise
+            build a default layout containing all fields.
+        """
+        if hasattr(self, 'Meta') and hasattr(self.Meta, 'layout'):
+            return self.Meta.layout
+        else:
+            # Construct a simple layout using the keys from the fields
+            return self.fields.keys()
+
     def as_div(self):
         """ Render the form as a set of <div>s. """
 
         self.top_errors = self.non_field_errors()
         self.prefix_fields = []
 
-        output = self.render_fields(self.layout)
+        output = self.render_fields(self.get_layout())
 
         if self.top_errors:
             errors = self.top_errors_as_html()
@@ -60,7 +63,7 @@ class BootstrapMixin(object):
         """ Render a list of fields and join the fields by the value in separator. """
 
         output = []
-        
+
         for field in fields:
             if isinstance(field, Fieldset):
                 output.append(field.as_html(self))
@@ -123,15 +126,16 @@ class BootstrapMixin(object):
                 'bf_raw' : bf,
                 'errors' : mark_safe(bf_errors),
                 'field_type' : mark_safe(field.__class__.__name__),
+                'label_id': bf._auto_id(),
             }
-            
+
             if self.custom_fields.has_key(field):
                 template = get_template(self.custom_fields[field])
             else:
                 template = select_template([
                     os.path.join(self.template_base, 'field_%s.html' % type(field_instance.widget).__name__.lower()),
                     os.path.join(self.template_base, 'field_default.html'), ])
-                
+
             # Finally render the field
             output = template.render(Context(field_hash))
 
@@ -157,8 +161,8 @@ class Fieldset(object):
         self.legend_html = legend and ('<legend>%s</legend>' % legend) or ''
         self.fields = fields
         self.css_class = kwargs.get('css_class')
-    
+
     def as_html(self, form):
         class_str = self.css_class and (' class="%s"' % self.css_class) or ''
         return u'<fieldset%s>%s%s</fieldset>' %  (class_str, self.legend_html, form.render_fields(self.fields), )
-            
+
