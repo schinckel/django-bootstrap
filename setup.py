@@ -43,13 +43,13 @@ package_data = dict(
 )
 
 setup(
-    name = 'bootstrap',
+    name = 'django-bootstrap',
     description = 'Twitter Bootstrap ready Django forms.',
     long_description=read('README.mkd'),
     author='Earle Ady',
     packages = ['bootstrap',],
     package_data = package_data,
-    version = '0.1.0',
+    version = '0.2.6',
     url='http://github.com/earle/django-bootstrap',
     keywords=[],
     license='Apache 2.0',
