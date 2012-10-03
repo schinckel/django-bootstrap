@@ -1,8 +1,8 @@
-<div id="div_{{ label_id }}" class="control-group{% if errors %} error{% endif %}">
-  {% include 'bootstrap/field_label.html' %}
+<div id="div_{{ label_id }}" class="control-group{% if bf_raw.field.required %} required{% endif %}{% if errors %} error{% endif %}">
+    {% include 'bootstrap/field_label.html' %}
     <div class="controls">
         {{ bf }}
         {% include 'bootstrap/field_errors.html' %}
         {% include 'bootstrap/field_help_text.html' %}
     </div>
-</div> <!-- /clearfix -->
+</div>
