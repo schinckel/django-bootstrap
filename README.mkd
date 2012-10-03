@@ -6,7 +6,7 @@ Installation
 ------------
 1. Install using pip:
 
-        pip install -e git+git://github.com/earle/django-bootstrap.git#egg=bootstrap
+        pip install django-bootstrap
 
 2. Add to INSTALLED_APPS:
 	
@@ -56,6 +56,21 @@ Template Usage
 Example Screenshot
 ------------------
 ![Example Form](http://i.imgur.com/lJEok.png)
+
+
+Static Files
+------------
+
+Contains the Bootstrap 2.1.1 installation (minus the icons), 
+plus the Font Awesome icon font (v2.0).
+
+In your template, you'll want to have:
+
+    <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/font-awesome.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    
+    <script src="YOU-NEED-jQuery-INSTALLED-HERE!"></script>
+    <script src="{{ STATIC_URL }}bootstrap/js/bootstrap.js"></script>
 
 
 TODO

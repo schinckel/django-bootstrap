@@ -1,12 +1,8 @@
 <div id="div_{{ label_id }}" class="control-group{% if errors %} error{% endif %}">
-    <label class="control-label" for="{{ label_id }}">{{ label }}</label>
+  {% include 'bootstrap/field_label.html' %}
     <div class="controls">
         {{ bf }}
-        {% if errors %}
-        <span class="help-inline">{{ errors }}</span>
-        {% endif %}
-        {% if help_text %}
-        <p class="help-block">{{ help_text }}</p>
-        {% endif %}
+        {% include 'bootstrap/field_errors.html' %}
+        {% include 'bootstrap/field_help_text.html' %}
     </div>
 </div> <!-- /clearfix -->

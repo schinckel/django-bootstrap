@@ -49,7 +49,7 @@ setup(
     author='Earle Ady',
     packages = ['bootstrap',],
     package_data = package_data,
-    version = '0.2.6',
+    version = '2.1.1.3',
     url='http://github.com/earle/django-bootstrap',
     keywords=[],
     license='Apache 2.0',

@@ -1,0 +1,7 @@
+{% if errors %}
+<span class="help-inline errorlist">
+{% for error in errors %}
+<span class="label label-important">{{ error }}</span>
+{% endfor %}
+</span>
+{% endif %}
