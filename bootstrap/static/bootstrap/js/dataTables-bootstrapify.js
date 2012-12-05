@@ -95,7 +95,7 @@ $.extend( $.fn.dataTableExt.oPagination, {
 } );
   
 if ($('table tbody').find('tr').length > 10) {
-  $('table').dataTable({
+  $('table:not(.no-dataTable):not(form table)').dataTable({
     // sPaginationType: "bootstrap",
     "sDom": "<''<'pull-left'l><'pull-right search-form'f>r>t<''<'span6'i><'span6'p>>",
     bPaginate: false,
@@ -103,4 +103,5 @@ if ($('table tbody').find('tr').length > 10) {
     sScrollY: "350px"
   });
   $('.search-form input').addClass('search-query');
+  $('.dataTables_info').parent().removeClass('span6');
 }
