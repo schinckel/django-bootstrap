@@ -1,0 +1,13 @@
+table th.header:before {
+  content: ' ';
+  float: right;
+  font-family: FontAwesome;
+  display: inline-block;
+  content: " ";
+}
+table th.header.headerSortDown:before {
+  content: "\f077";
+}
+table th.header.headerSortUp:before {
+  content: "\f078";
+}

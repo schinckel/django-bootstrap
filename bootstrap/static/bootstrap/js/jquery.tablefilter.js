@@ -1,9 +1,31 @@
 /* 
 
-Filter types:
+Filter types/options:
   
-  'search'
+  {type: 'search'}
+    -> global search (synonymous with 'search', or no-args.)
   
+  {type: 'search', column: 0} 
+    -> search on column 0 only: case insensitive
+  
+  {type: 'select', column: 0}
+    -> match on values from column 0 (in select box)
+       Note: there will be 'Any/None' appended/prepended to this select box.
+  
+  {type: 'select', column: 0, choices: {...}}
+     -> match on column 0 with choices from supplied object. 
+        ** NOTE: if your cell values do not match, they will be filtered out!
+  
+  {type: 'select', column: 0, choices: {...}, testFunction: function(searchTerm, cellContent) {...}}
+    -> Filter on column 0, passing the term to filter with, and the content of
+       the cell in the relevant row/column to testFunction. The return
+       value of testFunction will be used to determine if the row
+       containing this cell should be shown or hidden.
+  
+  {type: 'select', choices: {...}, testFunction: function(searchTerm, rowObject) {...}}
+    -> Filter on column 0, passing the term to filter with, and the whole row
+       object to testFunction. The return value of testFunction will be used 
+       to determine if the row containing this cell should be shown or hidden.
 
 */
 (function($, undefined) {
@@ -35,7 +57,7 @@ Filter types:
       
       // Simplest type of filter: a global search: will filter
       // only on visible data (uses .innerText)
-      if (settings === 'search') {
+      if (settings === 'search' || settings === undefined || (settings.type === 'search' && settings.column === undefined)) {
         var searchTerm = "";
         var $element = $('<input type="search" class="search-query">');
         filters.elements.append($element);
@@ -46,6 +68,7 @@ Filter types:
         filters.push(function(row) {
           return !!row.innerText.match(searchTerm)
         });
+        return;
       }
       
       // Search-based filter, which is only on a single column.
