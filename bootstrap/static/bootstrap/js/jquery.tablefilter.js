@@ -32,6 +32,7 @@ Filter types/options:
   var tablefilter = function(settings) {
     return this.each(function() {
       var $table = $(this);
+      var $headRows = $table.find('thead tr');
       var $rows = $table.find('tbody tr');
       var filters = $table.data('filters');
       
@@ -63,7 +64,7 @@ Filter types/options:
         filters.elements.append($element);
         $element.keyup(function() {
           searchTerm = new RegExp($element.val(), 'i');
-          filters.applyFilters();
+          setTimeout(filters.applyFilters, 0);
         });
         filters.push(function(row) {
           return !!row.innerText.match(searchTerm)
@@ -77,7 +78,7 @@ Filter types/options:
         // TODO: Allow for a column name instead.
         var column = parseInt(settings.column, 10);
         
-        var $headRows = $table.find('thead tr');
+        
         var $element = $('<label>' + $($headRows[$headRows.length - 1]).find('th')[column].innerText + ' <input type="search" class="search-query"></label>');
         filters.elements.append($element);
         $element = $element.find('input');
@@ -98,6 +99,7 @@ Filter types/options:
       
       if (settings.type == 'select') {
         var searchTerm = "";
+        // TODO: Allow for multiple columns when searching.
         var column = parseInt(settings.column, 10);
         
         var choices = settings.choices;
@@ -118,7 +120,7 @@ Filter types/options:
           }).sort();
         }
         
-        var $element = "<select>";
+        var $element = "<label class='help-inline'>" + $($headRows[$headRows.length - 1]).find('th')[column].innerText + " <select>";
         
         if (!settings.testFunction) {
           $element = $element + "<option value='___ANY___'>Any</option>";
@@ -129,7 +131,7 @@ Filter types/options:
         if (!settings.testFunction) {
           $element = $element + "<option value=''>None</option>";
         }
-        $element = $($element + "</select>");
+        $element = $($element + "</select></label>");
         filters.elements.append($element);
         
         $element.change(function() {
