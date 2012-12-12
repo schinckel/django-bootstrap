@@ -49,9 +49,9 @@ This might mean we actually collect the widths for every cell.
     }
   };
 
-  var tablescroller = function() {
+  var tablescroller = function(height) {
     return this.each(function() {
-      var handler = resizeHandler(this);
+      var handler = resizeHandler(this, height);
       $(window).on('resize', handler);
       handler();
     });
