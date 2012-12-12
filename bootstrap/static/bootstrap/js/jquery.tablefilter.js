@@ -79,7 +79,7 @@ Filter types/options:
         var column = parseInt(settings.column, 10);
         
         
-        var $element = $('<label>' + $($headRows[$headRows.length - 1]).find('th')[column].innerText + ' <input type="search" class="search-query"></label>');
+        var $element = $('<label class="help-inline search-label">' + $($headRows[$headRows.length - 1]).find('th')[column].innerText + ' <input type="search" class="search-query"></label>');
         filters.elements.append($element);
         $element = $element.find('input');
         $element.keyup(function() {
@@ -120,7 +120,7 @@ Filter types/options:
           }).sort();
         }
         
-        var $element = "<label class='help-inline'>" + $($headRows[$headRows.length - 1]).find('th')[column].innerText + " <select>";
+        var $element = "<label class='help-inline select-label'>" + $($headRows[$headRows.length - 1]).find('th')[column].innerText + " <select>";
         
         if (!settings.testFunction) {
           $element = $element + "<option value='___ANY___'>Any</option>";
@@ -133,6 +133,8 @@ Filter types/options:
         }
         $element = $($element + "</select></label>");
         filters.elements.append($element);
+        
+        $element = $element.find('select');
         
         $element.change(function() {
           searchTerm = $element.val();
