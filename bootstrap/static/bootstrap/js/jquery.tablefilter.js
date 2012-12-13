@@ -108,25 +108,28 @@ Filter types/options:
           choices = {};
           $rows.each(function(i, row) {
             $.each(row.innerText.split('\t')[column].split('\n'), function(j, val) {
-              choices[val] = val;
+              if (val) {
+                choices[val] = val;                
+              }
             });
           });
         };
         
-        if (_.isArray(choices)) {
-          // Turn it into a sorted list of {key:key, value:value}
-          choices = _.map(choices, function(value, key) {
-            return {key:key, value:value}
-          }).sort();
+        if (!_.isArray(choices)) {
+          choices = $.map(choices, function(key, value) {
+            return {key:key, value:value};
+          });
         }
+        
+        choices = choices.sort(function(x,y) {return x.key < y.key});
         
         var $element = "<label class='help-inline select-label'>" + $($headRows[$headRows.length - 1]).find('th')[column].innerText + " <select>";
         
         if (!settings.testFunction) {
           $element = $element + "<option value='___ANY___'>Any</option>";
         }
-        $.each(choices, function(key, value) {
-          $element = $element + "<option value='" + value + "'>" + key + "</option>"
+        $.each(choices, function(i, choice) {
+          $element = $element + "<option value='" + choice.value + "'>" + choice.key + "</option>"
         });
         if (!settings.testFunction) {
           $element = $element + "<option value=''>None</option>";
