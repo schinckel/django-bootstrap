@@ -35,6 +35,9 @@ Filter types/options:
       var $headRows = $table.find('thead tr');
       var $rows = $table.find('tbody tr');
       var filters = $table.data('filters');
+      var searchTerm = "";
+      var $element;
+      var column;
       
       // If we don't have an attached 'filters' block, then
       // we will need to create it, and add it to the page.
@@ -51,7 +54,7 @@ Filter types/options:
               }
             });
           });
-        }
+        };
         
         filters.elements = $('<div class="table-filters"></div>').insertBefore($table);
       }
@@ -59,27 +62,24 @@ Filter types/options:
       // Simplest type of filter: a global search: will filter
       // only on visible data (uses .innerText)
       if (settings === 'search' || settings === undefined || (settings.type === 'search' && settings.column === undefined)) {
-        var searchTerm = "";
-        var $element = $('<input type="search" class="search-query">');
+        $element = $('<input type="search" class="search-query">');
         filters.elements.append($element);
         $element.keyup(function() {
           searchTerm = new RegExp($element.val(), 'i');
           setTimeout(filters.applyFilters, 0);
         });
         filters.push(function(row) {
-          return !!row.innerText.match(searchTerm)
+          return !!row.innerText.match(searchTerm);
         });
         return;
       }
       
       // Search-based filter, which is only on a single column.
       if (settings.type == 'search') {
-        var searchTerm = "";
         // TODO: Allow for a column name instead.
-        var column = parseInt(settings.column, 10);
+        column = parseInt(settings.column, 10);
         
-        
-        var $element = $('<label class="help-inline search-label">' + $($headRows[$headRows.length - 1]).find('th')[column].innerText + ' <input type="search" class="search-query"></label>');
+        $element = $('<label class="help-inline search-label">' + $($headRows[$headRows.length - 1]).find('th')[column].innerText + ' <input type="search" class="search-query"></label>');
         filters.elements.append($element);
         $element = $element.find('input');
         $element.keyup(function() {
@@ -97,9 +97,8 @@ Filter types/options:
       // TODO: Allow for ul/li for multiple values.
       
       if (settings.type == 'select') {
-        var searchTerm = "";
         // TODO: Allow for multiple columns when searching.
-        var column = parseInt(settings.column, 10);
+        column = parseInt(settings.column, 10);
         
         var choices = settings.choices;
         
@@ -120,15 +119,15 @@ Filter types/options:
           });
         }
         
-        choices = choices.sort(function(x,y) {return x.key < y.key});
-        
-        var $element = "<label class='help-inline select-label'>" + $($headRows[$headRows.length - 1]).find('th')[column].innerText + " <select>";
+        choices = choices.sort(function(x,y) {return x.key < y.key;});
+        var label = settings.label || $($headRows[$headRows.length - 1]).find('th')[column].innerText;
+        $element = "<label class='help-inline select-label'>" + label + " <select>";
         
         if (!settings.testFunction) {
           $element = $element + "<option value='___ANY___'>Any</option>";
         }
         $.each(choices, function(i, choice) {
-          $element = $element + "<option value='" + choice.value + "'>" + choice.key + "</option>"
+          $element = $element + "<option value='" + choice.value + "'>" + choice.key + "</option>";
         });
         if (!settings.testFunction) {
           $element = $element + "<option value=''>None</option>";
