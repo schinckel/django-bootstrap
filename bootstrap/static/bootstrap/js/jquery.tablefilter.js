@@ -95,7 +95,6 @@ Filter types/options:
       // Select-based filter, on a single column.
       // Options will be values from that column: with <br> allowing us to have multiple values per row.
       // TODO: Allow for ul/li for multiple values.
-      // Should we push the column up the stack so that the function takes a value+testValue?
       
       if (settings.type == 'select') {
         var searchTerm = "";
@@ -139,12 +138,25 @@ Filter types/options:
         
         $element = $element.find('select');
         
+        // Select the default.
+        if (settings.selected !== undefined) {
+          $element.val(settings.selected);
+        } else {
+          // We need this in case multiple filter selects have been created.
+          if (!settings.testFunction) {
+            $element.val('___ANY___');
+          }
+        }
+        
+        // And, set the searchTerm, as this only gets set on change, otherwise.
+        searchTerm = $element.val();
+        
         $element.change(function() {
           searchTerm = $element.val();
           filters.applyFilters();
         });
         
-        // How to handle a function passed in?
+        // How to handle a function passed in.
         if (settings.testFunction) {
           filters.push(function(row){
             if (isNaN(column)) {
