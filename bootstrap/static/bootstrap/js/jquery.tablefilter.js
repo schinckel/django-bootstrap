@@ -54,13 +54,14 @@ Filter types/options:
               }
             });
           });
+          $(window).trigger('resize');
         };
         
         filters.elements = $('<div class="table-filters"></div>').insertBefore($table);
       }
       
       // Simplest type of filter: a global search: will filter
-      // only on visible data (uses .innerText)
+      // only on visible data (uses .text())
       if (settings === 'search' || settings === undefined || (settings.type === 'search' && settings.column === undefined)) {
         $element = $('<input type="search" class="search-query">');
         filters.elements.append($element);
@@ -69,7 +70,7 @@ Filter types/options:
           setTimeout(filters.applyFilters, 0);
         });
         filters.push(function(row) {
-          return !!row.innerText.match(searchTerm);
+          return !!$(row).text().match(searchTerm);
         });
         return;
       }
@@ -79,7 +80,7 @@ Filter types/options:
         // TODO: Allow for a column name instead.
         column = parseInt(settings.column, 10);
         
-        $element = $('<label class="help-inline search-label">' + $($headRows[$headRows.length - 1]).find('th')[column].innerText + ' <input type="search" class="search-query"></label>');
+        $element = $('<label class="help-inline search-label">' + $($($headRows[$headRows.length - 1]).find('th')[column]).text() + ' <input type="search" class="search-query"></label>');
         filters.elements.append($element);
         $element = $element.find('input');
         $element.keyup(function() {
@@ -87,7 +88,7 @@ Filter types/options:
           filters.applyFilters();
         });
         filters.push(function(row) {
-          return !!$(row).find('td')[column].innerText.match(searchTerm);
+          return !!$($(row).find('td')[column]).text().match(searchTerm);
         });
       }
       
@@ -105,7 +106,8 @@ Filter types/options:
         if (!choices) {
           choices = {};
           $rows.each(function(i, row) {
-            $.each(row.innerText.split('\t')[column].split('\n'), function(j, val) {
+            $.each($($(row).find('td,th')[column]).text().split('\n'), function(j, val) {
+              val = val.replace(/^ +/,'').replace(/ +$/, '');
               if (val) {
                 choices[val] = val;                
               }
@@ -120,7 +122,7 @@ Filter types/options:
         }
         
         choices = choices.sort(function(x,y) {return x.key < y.key;});
-        var label = settings.label || $($headRows[$headRows.length - 1]).find('th')[column].innerText;
+        var label = settings.label || $($($headRows[$headRows.length - 1]).find('th')[column]).text();
         $element = "<label class='help-inline select-label'>" + label + " <select>";
         
         if (!settings.testFunction) {
@@ -161,7 +163,7 @@ Filter types/options:
             if (isNaN(column)) {
               return settings.testFunction(searchTerm, row);              
             } else {
-              return settings.testFunction(searchTerm, $(row).find('td')[column].innerText);
+              return settings.testFunction(searchTerm, $($(row).find('td')[column]).text());
             }
           });
         } else {
@@ -169,7 +171,12 @@ Filter types/options:
             if (searchTerm == '___ANY___') {
               return true;
             }
-            var values = $(row).find('td')[column].innerText.split('\n');
+            if (searchTerm === "") {
+              return $($(row).find('td')[column]).text().replace(/\W+/, '').length == 0;
+            }
+            var values = $($(row).find('td')[column]).text().split('\n').map(function(x) {
+              return x.replace(/^ +/, '').replace(/ +$/, '');
+            });
             return values.indexOf(searchTerm) > -1;
           });
         }
