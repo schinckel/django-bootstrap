@@ -1,0 +1,59 @@
+.selector {
+  display: block;
+  text-align: center;
+  padding-bottom: 0;
+}
+        
+.selector div {
+  display: inline;
+  display: inline-block;
+}
+        
+.selector-choose-all, .selector-clear-all {
+  display: block;
+}
+        
+.selector a:hover {
+  text-decoration: none;
+}
+        
+.selector a i {
+  font-size: 1.5em;
+  padding: 4px;
+  vertical-align: middle;
+}
+        
+p.selector-filter {
+  margin: 0;
+  height: 32px;
+}
+.selector input, .selector select {
+  display: block;
+}
+          
+.selector-filter label {
+  position: relative;
+}
+        
+.selector-filter label i.icon-search {
+  position: absolute;
+  top: 5px;
+  right: 8px;
+}
+        
+p.selector-info {
+  margin: 0;
+  padding: 4px;
+  height: 24px;
+}
+.selector-chooser {
+  padding-top: 96px;
+  margin: 0;
+}
+        
+.selector-header {
+  display: block;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  margin-bottom: 3px;
+}
