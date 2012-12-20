@@ -45,7 +45,7 @@ Filter types/options:
         $table.data('filters', []);
         filters = $table.data('filters');
         // Create a function that will apply all filters.
-        filters.applyFilters = function applyFilters() {
+        filters.applyFilters = _.throttle(function applyFilters() {
           $rows.show();
           $rows.each(function(i, row) {
             $.each(filters, function(j, func) {
@@ -55,7 +55,7 @@ Filter types/options:
             });
           });
           $(window).trigger('resize');
-        };
+        }, 500);
         
         filters.elements = $('<div class="table-filters"></div>').insertBefore($table);
       }
@@ -67,7 +67,7 @@ Filter types/options:
         filters.elements.append($element);
         $element.keyup(function() {
           searchTerm = new RegExp($element.val(), 'i');
-          setTimeout(filters.applyFilters, 0);
+          filters.applyFilters();
         });
         filters.push(function(row) {
           return !!$(row).text().match(searchTerm);
@@ -78,18 +78,34 @@ Filter types/options:
       // Search-based filter, which is only on a single column.
       if (settings.type == 'search') {
         // TODO: Allow for a column name instead.
-        column = parseInt(settings.column, 10);
+        var heading;
         
-        $element = $('<label class="help-inline search-label">' + $($($headRows[$headRows.length - 1]).find('th')[column]).text() + ' <input type="search" class="search-query"></label>');
+        if (_.isArray(settings.column)) {
+          column = _.map(settings.column, Number);
+          heading = 'Search';
+        } else {
+          column = parseInt(settings.column, 10);
+          heading = $($($headRows[$headRows.length - 1]).find('th')[column]).text();
+        }
+        
+        $element = $('<label class="help-inline search-label">' + heading + ' <input type="search" class="search-query"></label>');
         filters.elements.append($element);
         $element = $element.find('input');
         $element.keyup(function() {
           searchTerm = new RegExp($element.val(), 'i');
           filters.applyFilters();
         });
-        filters.push(function(row) {
-          return !!$($(row).find('td')[column]).text().match(searchTerm);
-        });
+        if (_.isArray(column)) {
+          filters.push(function(row) {
+            return !! _.any(_.map(column, function(c) {
+              return $($(row).find('td')[c]).text().match(searchTerm);
+            }));
+          });
+        } else {
+          filters.push(function(row) {
+            return !!$($(row).find('td')[column]).text().match(searchTerm);
+          });
+        }
       }
       
       

@@ -52,7 +52,7 @@ into:
 */
 
 (function($, undefined) {
-  var Selector = function(element) {
+  var createSelector = function(element) {
     var $element = $(element);
     var $widget = $('<div class="selector"><div class="selector-available"><p class="label label-info selector-header">Available choices</p><p class="selector-filter"><label><i class="icon-search"></i><input type="search"></label></p><select multiple="multiple" class="filtered" size="10"></select><a href="#" class="selector-choose-all"><i class="icon-circle-arrow-right"></i>Choose all</a></div><ul class="selector-chooser"><li><a href="#" class="selector-add"><i class="icon-circle-arrow-right"></i></a></li><li><a href="#" class="selector-remove"><i class="icon-circle-arrow-left"></i></a></li></ul><div class="selector-chosen"><p class="label selector-header">Chosen items</p><p class="selector-info">Select choice(s) and click <i class="icon-circle-arrow-right"></i></p><select class="filtered" multiple size=10></select><p class="selector-clear-all"><a href="#"><i class="icon-remove-sign"></i>Clear all</a></p></div></div>');
     $widget.insertBefore($element);
@@ -126,7 +126,7 @@ into:
   
   var dynamicSelect = function(settings) {
     return this.each(function() {
-      new Selector(this);
+      createSelector(this);
     });
   };
   

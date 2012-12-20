@@ -1,6 +1,5 @@
 .selector {
   display: block;
-  text-align: center;
   padding-bottom: 0;
 }
         
@@ -11,6 +10,7 @@
         
 .selector-choose-all, .selector-clear-all {
   display: block;
+  text-align: center;
 }
         
 .selector a:hover {
@@ -55,5 +55,6 @@ p.selector-info {
   display: block;
   padding-top: 6px;
   padding-bottom: 6px;
+  padding-left: 8px;
   margin-bottom: 3px;
 }
