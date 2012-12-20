@@ -49,7 +49,7 @@ setup(
     author='Matthew Schinckel',
     packages = ['bootstrap',],
     package_data = package_data,
-    version = '2.2.2.0',
+    version = '2.2.2.1',
     url='http://github.com/schinckel/django-bootstrap',
     keywords=[],
     license='Apache 2.0',
