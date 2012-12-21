@@ -131,4 +131,9 @@ into:
   };
   
   $.fn.dynamicSelect = dynamicSelect;
+
+  // iPad/iPhone already have a decent multiple select widget.
+  if (navigator.platform.match(/^iP/)) {
+    $.fn.dynamicSelect = function() {};
+  }
 })(jQuery);
