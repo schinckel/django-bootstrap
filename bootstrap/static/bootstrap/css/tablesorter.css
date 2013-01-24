@@ -5,9 +5,14 @@ table th.header:before {
   display: inline-block;
   content: " ";
 }
-table th.header.headerSortDown:before {
+table th.header.headerSortDown:before, table th.header.headerSortDown:hover:before {
   content: "\f077";
 }
-table th.header.headerSortUp:before {
+table th.header.headerSortUp:before, table th.header:hover:before {
   content: "\f078";
+}
+
+table .headerSortUp, table .headerSortDown {
+  background-color: #f7f7f9;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
 }
